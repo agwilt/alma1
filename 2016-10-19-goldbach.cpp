@@ -76,8 +76,6 @@ int main(int argc, char *argv[])
 
 	for (int i=0; primes[i]<=(min/2); ++i) {
 		int p = primes[i];
-		if (is_prime[min-p]) {
-			std::cout << p << " + " << min-p << "\n";
-		}
+		if (is_prime[min-p]) std::cout << p << " + " << min-p << "\n";
 	}
 }
