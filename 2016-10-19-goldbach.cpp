@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
 
 	// Initialize array to store my list of primes, along with its length
 	int *primes = new int[b];
+	int *primes_backup = primes;
 	int p_length = 0;
 
 	// Start sieving for primes
@@ -39,8 +40,8 @@ int main(int argc, char *argv[])
 	for (int i=2; i<b; ++i) {
 		if (is_prime[i]) {
 			primes[p_length] = i;
-			p_length++;
-			for (int j=i; j<=(b/i); j++) is_prime[j*i]=false;
+			++p_length;
+			for (int j=i; j<=(b/i); ++j) is_prime[j*i]=false;
 		}
 	}
 
@@ -51,23 +52,25 @@ int main(int argc, char *argv[])
 	int sums_temp, sums = b; // definitely bigger than everything
 
 	// If a is odd, increment it
-	if (a%2) a++;
+	if (a%2) ++a;
 
 	// Now count sums for all even ints between a and b
 	for (int c=a; c<=b; c+=2) {
 		sums_temp = 0;
 		// Go through all primes <= c/2 and check if c-prime is prime.
-		for (int i=0; primes[i]<=(c/2); i++) {
+		for (; *primes <= (c/2); ++primes) {
 			// Stop if c already has as many sums as the minimum
 			if (sums_temp >= sums) break;
 			// If a prime sum was found, increment counter
-			if (is_prime[c-primes[i]]) sums_temp++;
+			if (is_prime[c-*primes]) ++sums_temp;
 		}
 		// Update sums and min if a "better" c was found
 		if (sums_temp < sums) {
 			sums = sums_temp;
 			min = c;
 		}
+		// "Reset" the primes array
+		primes = primes_backup;
 	}
 
 	// Loop to output min, sums, and all of min's sums.
