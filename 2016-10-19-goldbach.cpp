@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	/* Tell the user he's an idiot if he input stupid numbers.
+	/* Tell the user he's an idiot if he inputs stupid numbers.
 	 * Technically, it should only accept b>a, but it's useful to find the
 	 * number of prime sums a single number has.
 	 */
@@ -32,8 +32,9 @@ int main(int argc, char *argv[])
 	int *p = primes;
 	int p_length = 0;
 
-	// Start sieving for primes
-	// is_prime is very useful later on to check if a number is prime
+	/* Start sieving for primes.
+	 * is_prime is very useful later on to check if a number is prime
+	 */
 	bool *is_prime = new bool[b];
 	// Initialize is_prime as true everywhere
 	for (int i=0; i<b; ++i) is_prime[i] = true;
@@ -41,13 +42,15 @@ int main(int argc, char *argv[])
 		if (is_prime[i]) {
 			primes[p_length] = i;
 			++p_length;
+			// Set multiples of i to false
 			for (int j=i; j<=(b/i); ++j) is_prime[j*i]=false;
 		}
 	}
 
-	// min: number between a and b with the smallest number of prime sums
-	// sums: the (current) smallest number of sums
-	// sums_temp: number of sums for the current c
+	/* min: number between a and b with the smallest number of prime sums
+	 * sums: the (current) smallest number of sums
+	 * sums_temp: number of sums for the current c
+	 */
 	int min;
 	int sums_temp, sums = b; // definitely bigger than everything
 
@@ -69,7 +72,6 @@ int main(int argc, char *argv[])
 			sums = sums_temp;
 			min = c;
 		}
-		// "Reset" the primes array
 	}
 
 	// Loop to output min, sums, and all of min's sums.
