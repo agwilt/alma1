@@ -12,9 +12,12 @@ int main(int argc, char *argv[])
 	int a = atoi(argv[1]);
 	int b = atoi(argv[2]);
 
+	// If a is odd, increment it
+	if (a%2) ++a;
+
 	// Error if a or b are under 4
-	if (b<4 || a<4) {
-		std::cerr << "Please make sure a and b are at least 4.\n";
+	if (a<=2) {
+		std::cerr << "Please make sure a is over 2.\n";
 		return 1;
 	}
 
@@ -43,7 +46,7 @@ int main(int argc, char *argv[])
 			primes[p_length] = i;
 			++p_length;
 			// Set multiples of i to false
-			for (int j=i; j<=(b/i); ++j) is_prime[j*i]=false;
+			for (int j=i; j<=(b/i); ++j) is_prime[i*j]=false;
 		}
 	}
 
@@ -53,9 +56,6 @@ int main(int argc, char *argv[])
 	 */
 	int min;
 	int sums_temp, sums = b; // definitely bigger than everything
-
-	// If a is odd, increment it
-	if (a%2) ++a;
 
 	// Now count sums for all even ints between a and b
 	for (int c=a; c<=b; c+=2) {
