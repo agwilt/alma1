@@ -34,6 +34,10 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
+	/*
+	 * Setup done, proceed to find some primes
+	 */
+
 	// Initialize array to store my list of primes, along with its length
 	int *primes = new int[b];
 	int *p = primes;
@@ -54,11 +58,15 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	/*
+	 * Primes found, now count sums
+	 */
+
 	/* min: number between a and b with the smallest number of prime sums
 	 * sums: the (current) smallest number of sums
 	 * sums_temp: number of sums for the current c
 	 */
-	int min;
+	int min=0; // Initialize to suppress stupid compiler warnings
 	int sums_temp, sums = b; // definitely bigger than everything
 
 	// Now count sums for all even ints between a and b
