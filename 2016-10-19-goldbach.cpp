@@ -3,14 +3,18 @@
 int main(int argc, char *argv[])
 {
 	// Exit with an error message if not enough arguments received.
-	if (argc<3) {
+	if (argc<2) {
 		std::cerr << argv[0] << ": Error: a or b not specified.\n";
 		return 1;
 	}
 
 	// Then get a and b from argv (TODO: Safer method)
 	int a = atoi(argv[1]);
-	int b = atoi(argv[2]);
+	int b;
+
+	// If only one argument was supplied, set b=a
+	if (argc>=3) b = atoi(argv[2]);
+	else b = a;
 
 	// If a is odd, increment it
 	if (a%2) ++a;
