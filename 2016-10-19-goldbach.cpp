@@ -1,20 +1,34 @@
 #include <iostream>
 
+/*
+ * 2016-10-19-golbach.cpp
+ * (Andreas and Jean-Luc)
+ *
+ * Takes two numbers a and b, (with a>2 and b>=a) and returns the even number c
+ * (with a<=c<=b) that has the least sums of two primes (e.g. 68=7+61=31+37).
+ *
+ * Arguments:
+ * ./2016-10-19-golbach a [b] (if no b supplied, b is set to a)
+ * or
+ * ./2016-10-19-golbach (gets a and b from stdin)
+ */
+
 int main(int argc, char *argv[])
 {
-	// Exit with an error message if not enough arguments received.
-	if (argc<2) {
-		std::cerr << argv[0] << ": Error: a or b not specified.\n";
-		return 1;
+	int a, b;
+
+	// argc==1: stdin, argc==2: b=a=argv[1], argc>2: b,a from argv
+	if (argc==1) {
+		std::cout << "Enter a: ";
+		std::cin >> a;
+		std::cout << "Enter b: ";
+		std::cin >> b;
+	} else {
+		a = atoi(argv[1]);
+		// If only one argument was supplied, set b=a
+		if (argc>=3) b = atoi(argv[2]);
+		else b = a;
 	}
-
-	// Then get a and b from argv (TODO: Safer method)
-	int a = atoi(argv[1]);
-	int b;
-
-	// If only one argument was supplied, set b=a
-	if (argc>=3) b = atoi(argv[2]);
-	else b = a;
 
 	// If a is odd, increment it
 	if (a%2) ++a;
@@ -25,10 +39,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	/* Tell the user he's an idiot if he inputs stupid numbers.
-	 * Technically, it should only accept b>a, but it's useful to find the
-	 * number of prime sums a single number has.
-	 */
+	// Change to b<=a for stricter error checking
 	if (b < a) {
 		std::cerr << "Seriously?\n";
 		return 1;
@@ -43,9 +54,7 @@ int main(int argc, char *argv[])
 	int *p = primes;
 	int p_length = 0;
 
-	/* Start sieving for primes.
-	 * is_prime is very useful later on to check if a number is prime
-	 */
+	// Start sieving for primes.
 	bool *is_prime = new bool[b];
 	// Initialize is_prime as true everywhere
 	for (int i=0; i<b; ++i) is_prime[i] = true;
@@ -54,7 +63,7 @@ int main(int argc, char *argv[])
 			primes[p_length] = i;
 			++p_length;
 			// Set multiples of i to false
-			for (int j=i; j<=(b/i); ++j) is_prime[i*j]=false;
+			for (int j=i; j<(b/i); ++j) is_prime[i*j]=false;
 		}
 	}
 
