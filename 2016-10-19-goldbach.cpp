@@ -13,6 +13,23 @@
  * ./2016-10-19-golbach (gets a and b from stdin)
  */
 
+void primes_list(int *primes, bool *is_prime, int b)
+{
+	int p_length = 0;
+
+	for (int i=0; i<b; ++i) is_prime[i] = true;
+	// Start sieving for primes.
+	// Initialize is_prime as true everywhere
+	for (int i=2; i<b; ++i) {
+		if (is_prime[i]) {
+			primes[p_length] = i;
+			++p_length;
+			// Set multiples of i to false
+			for (int j=i; j<(b/i); ++j) is_prime[i*j]=false;
+		}
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	int a, b;
@@ -33,7 +50,7 @@ int main(int argc, char *argv[])
 	// If a is odd, increment it
 	if (a%2) ++a;
 
-	// Error if a or b are under 4
+	// Error if a or b aren't over 2
 	if (a<=2) {
 		std::cerr << "Please make sure a is over 2.\n";
 		return 1;
@@ -51,21 +68,10 @@ int main(int argc, char *argv[])
 
 	// Initialize array to store my list of primes, along with its length
 	int *primes = new int[b];
-	int *p = primes;
-	int p_length = 0;
-
-	// Start sieving for primes.
 	bool *is_prime = new bool[b];
-	// Initialize is_prime as true everywhere
-	for (int i=0; i<b; ++i) is_prime[i] = true;
-	for (int i=2; i<b; ++i) {
-		if (is_prime[i]) {
-			primes[p_length] = i;
-			++p_length;
-			// Set multiples of i to false
-			for (int j=i; j<(b/i); ++j) is_prime[i*j]=false;
-		}
-	}
+	int *p;
+	// Populate primes and is_prime.
+	primes_list(primes, is_prime, b);
 
 	/*
 	 * Primes found, now count sums
