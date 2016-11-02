@@ -30,6 +30,14 @@ void primes_list(int *primes, bool *is_prime, int b)
 	}
 }
 
+void output_sums(int *primes, bool *is_prime, int c)
+{
+	for (int *p = primes; *p <= (c/2); ++p) {
+		if (is_prime[c-*p])
+			std::cout << c << " = " << *p << " + " << c-*p << "\n";
+	}
+}
+
 int main(int argc, char *argv[])
 {
 	int a, b;
@@ -66,10 +74,9 @@ int main(int argc, char *argv[])
 	 * Setup done, proceed to find some primes
 	 */
 
-	// Initialize array to store my list of primes, along with its length
+	// Declare list of primes and bool array is_prime
 	int *primes = new int[b];
 	bool *is_prime = new bool[b];
-	int *p;
 	// Populate primes and is_prime.
 	primes_list(primes, is_prime, b);
 
@@ -88,7 +95,7 @@ int main(int argc, char *argv[])
 	for (int c=a; c<=b; c+=2) {
 		sums_temp = 0;
 		// Go through all primes <= c/2 and check if c-prime is prime.
-		for (p = primes; *p <= (c/2); ++p) {
+		for (int *p = primes; *p <= (c/2); ++p) {
 			// Stop if c already has as many sums as the minimum
 			if (sums_temp >= sums) break;
 			// If a prime sum was found, increment counter
@@ -101,12 +108,10 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	// Loop to output min, sums, and all of min's sums.
-	std::cout << "Even number between " << a << " and " << b << " with the least prime sums:\n";
-	std::cout << min << " has " << sums << ":\n";
+	// Output min, sums, and all of min's sums.
+	output_sums(primes, is_prime, min);
 
-	for (p = primes; *p <= (min/2); ++p) {
-		if (is_prime[min-*p])
-			std::cout << *p << " + " << min-*p << "\n";
-	}
+	std::cout << "Even number between " << a << " and " << b
+		<< " with the least prime sums:\t" << min << " has "
+		<< sums << " sum" << ((sums>1)?"s":"") << ".\n";
 }
