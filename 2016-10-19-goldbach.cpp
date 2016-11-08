@@ -124,4 +124,6 @@ int main(int argc, char *argv[])
 		std::cout << "Even number between " << user_a << " and " << b
 		<< " with the least prime sums:\t" << min << " has "
 		<< sums << " sum" << ((sums>1)?"s":"") << ".\n";
+	delete[] primes;
+	delete[] is_prime;
 }

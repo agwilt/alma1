@@ -1,5 +1,5 @@
 CPP=g++
-CPPFLAGS=-O2 -Wall -pedantic -std=c++11
+CPPFLAGS=-O2 -Wall -Wextra -g -pedantic -std=c++11
 GOLDBACH=2016-10-19-goldbach
 
 $(GOLDBACH): $(GOLDBACH).cpp
