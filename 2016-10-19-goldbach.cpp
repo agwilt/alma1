@@ -38,16 +38,24 @@ void output_sums(int *primes, bool *is_prime, int c)
 	}
 }
 
+void error(const char *string)
+{
+	std::cerr << string;
+	exit(1);
+}
+
 int main(int argc, char *argv[])
 {
-	int a, b;
+	int user_a, a, b;
 
 	// argc==1: stdin, argc==2: b=a=argv[1], argc>2: b,a from argv
 	if (argc==1) {
 		std::cout << "Enter a: ";
 		std::cin >> a;
+		if (std::cin.fail()) error("Error: Bad input.\n");
 		std::cout << "Enter b: ";
 		std::cin >> b;
+		if (std::cin.fail()) error("Error: Bad input.\n");
 	} else {
 		a = atoi(argv[1]);
 		// If only one argument was supplied, set b=a
@@ -55,20 +63,19 @@ int main(int argc, char *argv[])
 		else b = a;
 	}
 
-	// If a is odd, increment it
-	if (a%2) ++a;
-
 	// Error if a or b aren't over 2
-	if (a<=2) {
-		std::cerr << "Please make sure a is over 2.\n";
-		return 1;
-	}
+	if (a<=2)
+		error("Please make sure a is over 2.\n");
 
 	// Change to b<=a for stricter error checking
-	if (b < a) {
-		std::cerr << "Seriously?\n";
-		return 1;
-	}
+	if ((argc==2) && (a%2))
+		error("Even numbers only, please.\n");
+	if ((argc!=2) && (b <= a))
+		error("Oh dear. It would seem that b isn't greater than a ....\n");
+
+	// If a is odd, increment it
+	user_a = a; //nice output
+	if (a%2) ++a;
 
 	/*
 	 * Setup done, proceed to find some primes
@@ -111,7 +118,10 @@ int main(int argc, char *argv[])
 	// Output min, sums, and all of min's sums.
 	output_sums(primes, is_prime, min);
 
-	std::cout << "Even number between " << a << " and " << b
+	if (argc==2) //only one number supplied
+		std::cout << "Total: " << sums << " prime sums.\n";
+	else
+		std::cout << "Even number between " << user_a << " and " << b
 		<< " with the least prime sums:\t" << min << " has "
 		<< sums << " sum" << ((sums>1)?"s":"") << ".\n";
 }
