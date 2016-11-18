@@ -6,10 +6,10 @@ const std::string LargeInt::digits = "0123456789";
 
 LargeInt::LargeInt(inputtype i)   // constructor, calls constructor of vector
 {
-   do {
-	   _v.push_back(i % 10);
-	   i /= 10;
-   } while (i > 0);
+	do {
+		v.push_back(i % 10);
+		i /= 10;
+	} while (i > 0);
 }
 
 
@@ -26,12 +26,12 @@ std::string LargeInt::decimal() const   // returns decimal representation
 bool LargeInt::operator<(const LargeInt & arg) const   // checks if < arg
 {
 	if (_v.size() == arg._v.size()) {
-	  auto it2 = arg._v.rbegin();
-	  for (auto it1 = _v.rbegin(); it1 != _v.rend(); ++it1, ++it2) {
+		auto it2 = arg._v.rbegin();
+	for (auto it1 = _v.rbegin(); it1 != _v.rend(); ++it1, ++it2) {
 		if (*it1 < *it2) return true;
 		if (*it1 > *it2) return false;
-	  }
-	  return false;
+	}
+		return false;
 	}
 	return _v.size() < arg._v.size();
 }
