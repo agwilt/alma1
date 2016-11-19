@@ -12,6 +12,11 @@ LargeInt::LargeInt(inputtype i)   // constructor, calls constructor of vector
 	} while (i > 0);
 }
 
+LargeInt::LargeInt(std::vector<short> v)
+{
+	_v = v;
+}
+
 
 std::string LargeInt::decimal() const   // returns decimal representation
 {
@@ -74,7 +79,7 @@ LargeInt LargeInt::operator-(const LargeInt & arg) const  // subtraction
 const LargeInt & LargeInt::operator-=(const LargeInt & arg) // subtraction
 {
 	if (arg > *this) {
-		throw std::invalid_argument( "arg larger than this" );
+		throw std::invalid_argument("arg larger than this");
 	}
 	auto it1 = _v.begin();
 	for (auto it2 = arg._v.begin(); it2 != arg._v.end(); ++it2, ++it1) {
@@ -106,7 +111,7 @@ LargeInt LargeInt::operator*(const LargeInt& arg) const  // multiplication
 
 const LargeInt & LargeInt::operator*=(const LargeInt & arg) //multiplication
 {
-	if (arg._v.size()< 2 && _v.size()<2){					//Termination condition
+	if (arg._v.size()< 2 && _v.size()<2) {					//Termination condition
 		int minimulti;
 
 		minimulti=_v[0]*arg._v[0];
