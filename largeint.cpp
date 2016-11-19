@@ -41,6 +41,21 @@ bool LargeInt::operator<(const LargeInt & arg) const   // checks if < arg
 	return _v.size() < arg._v.size();
 }
 
+
+bool LargeInt::operator>(const LargeInt & arg) const   // checks if > arg
+{
+	if (_v.size() == arg._v.size()) {
+		auto it2 = arg._v.rbegin();
+		for (auto it1 = _v.rbegin(); it1 != _v.rend(); ++it1, ++it2) {
+			if (*it1 > *it2) return true;
+			if (*it1 < *it2) return false;
+		}
+		return false;
+	}
+	return _v.size() > arg._v.size();
+}
+
+
 LargeInt LargeInt::operator+(const LargeInt & arg) const  // addition
 {
 	LargeInt result(*this);
