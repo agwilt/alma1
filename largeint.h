@@ -11,20 +11,15 @@ public:
 	using inputtype = long long;
 
 	LargeInt(inputtype);				// constructor
-	LargeInt(std::vector<short>);			// constructor
 	std::string decimal() const;			// decimal representation
-
 	bool operator<(const LargeInt &) const;		// comparison
 	bool operator>(const LargeInt &) const;		// other comparison
-
 	const LargeInt & operator+=(const LargeInt &);	// addition
 	const LargeInt & operator-=(const LargeInt &);	// subtraction
 	const LargeInt & operator*=(const LargeInt&);	// multiplication
-
 	LargeInt operator*(const LargeInt&) const;	// multiplication
 	LargeInt operator+(const LargeInt &) const;	// addition
 	LargeInt operator-(const LargeInt &) const;	// subtraction
-
 	LargeInt timesten(int n); 			// multiplied by 10**n
 	
 private:
