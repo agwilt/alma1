@@ -2,36 +2,31 @@
 
 #include <iostream>
 #include "largeint.h"
-#include <vector>
 
-/*void Multi(int n,std::vector<LargeInt> resultmulti){
-	int i=0;
-	int j;
-	resultmulti[0]=1;
-	resultmulti[1]=1;
-	while (i<n){
-	LargeInt sum(0);
-		for (j=1;j<=n;++j){
-			sum=sum+resultmulti[i]*resultmulti[i-j];
-		}
-		resultmulti.push_back(sum);
-		++i;
-	}
-}*/
-
-int main(){
-	 LargeInt a = LargeInt(11);
-	 LargeInt b = LargeInt(20);
-	 LargeInt produkt = a * b;
-	 std::cout << produkt.decimal();
-
-	/*int n;
-	std::cout<< "Enter an LargeInteger: ";
-	std::cin>> n;
-	std::cout<< "The number is ";
-	std::cout <<"\n";
-	std::vector<LargeInt> resultmulti;
-	Multi(5,resultmulti);
+int main(int argc, char *argv[]) {
+	/*
+	if (argc<3) return 1;
+	LargeInt a(atoi(argv[1]));
+	LargeInt b(atoi(argv[2]));
+	std::cout << (a*b).decimal() << std::endl;;
 	*/
+	if (argc<2) return 1;
+	int n = atoi(argv[1]);
+
+	std::vector<LargeInt> C;
+	C.push_back(LargeInt(1));
+	C.push_back(LargeInt(1));
+
+	LargeInt sum(0);
+
+	for (int i=1; i<=n; ++i) {
+
+		sum = LargeInt(0);
+		for (int k=0; k<=i; ++k) {
+			sum  += C[k] * C[i-k];
+		}
+		C.push_back(sum);
+	}
+	std::cout << C[n].decimal() << std::endl;
 	return 0;
 }

@@ -1,5 +1,5 @@
 CPP=g++
-CPPFLAGS=-O2 -Wall -Wextra -g -pedantic -std=c++11
+CPPFLAGS=-O2 -Werror -Wall -Wextra -g -pedantic -std=c++11
 GOLDBACH=2016-10-19-goldbach
 SERIES=2016-11-02-series
 

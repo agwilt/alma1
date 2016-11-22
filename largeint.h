@@ -10,6 +10,8 @@ class LargeInt {
 public:
 	using inputtype = long long;
 
+	const LargeInt & strip_trailing();
+
 	LargeInt(inputtype);				// constructor
 	LargeInt(std::vector<short>);			// constructor
 	std::string decimal() const;			// decimal representation
@@ -19,7 +21,7 @@ public:
 
 	const LargeInt & operator+=(const LargeInt &);	// addition
 	const LargeInt & operator-=(const LargeInt &);	// subtraction
-	const LargeInt & operator*=(const LargeInt&);	// multiplication
+	//const LargeInt & operator*=(const LargeInt&);	// multiplication
 
 	LargeInt operator*(const LargeInt&) const;	// multiplication
 	LargeInt operator+(const LargeInt &) const;	// addition

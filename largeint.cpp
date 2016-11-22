@@ -17,6 +17,13 @@ LargeInt::LargeInt(std::vector<short> v)
 	_v = v;
 }
 
+const LargeInt & LargeInt::strip_trailing()
+{
+	while (_v.size() > 1 && _v.back() == 0) {
+		_v.pop_back();
+	}
+	return *this;
+}
 
 std::string LargeInt::decimal() const   // returns decimal representation
 {
@@ -112,11 +119,13 @@ const LargeInt & LargeInt::operator-=(const LargeInt & arg) // subtraction
 
 LargeInt LargeInt::timesten(int n)
 {
+	LargeInt ans(*this);
 	while (n --> 0)
-		_v.insert(_v.begin(), 0);
-	return *this;
+		ans._v.insert(ans._v.begin(), 0);
+	return ans;
 }
 
+/*
 LargeInt LargeInt::operator*(const LargeInt& arg) const  // multiplication
 {
 	LargeInt result(*this);
@@ -186,13 +195,60 @@ const LargeInt & LargeInt::operator*=(const LargeInt & arg) //multiplication
 	LargeInt Multi2=x2*y2;
 	LargeInt Multi3=(x1*y2)+(x2*y1)	;
 	for (j=0;j<e10n;++j){
-		Multi1._v.push_back(0);
+		Multi1._v.insert(_v.begin(), 0);
 	}
 	for(j=0;j<e10n2;++j){
-		Multi3._v.push_back(0);
+		Multi1._v.insert(_v.begin(), 0);
 	}
 
 	*this=Multi1+Multi3+Multi2;
 
 	return *this;
+}
+*/
+
+LargeInt LargeInt::operator*(const LargeInt & arg) const // multiplication
+{
+	if (_v.size() == 1 && arg._v.size() == 1) {
+		if (_v[0] == 0 || arg._v[0] == 0) return LargeInt(0);
+		inputtype value = _v[0]*arg._v[0];
+		return LargeInt(value);
+	}
+	int l = max(_v.size(), arg._v.size());
+	int n = l/2;
+	LargeInt this_significant(*this);
+	LargeInt this_insig(*this);
+	LargeInt arg_significant(arg);
+	LargeInt arg_insig(arg);
+
+	// Pad all numbers with 0s
+	while (this_significant._v.size() < arg._v.size()) {
+		this_significant._v.push_back(0);
+		this_insig._v.push_back(0);
+	}
+	while (arg_significant._v.size() < _v.size()) {
+		arg_significant._v.push_back(0);
+		arg_insig._v.push_back(0);
+	}
+
+	// "Split" the two vectors
+	for (int i=0; i<(l-n); ++i) {
+		this_insig._v.pop_back();
+		arg_insig._v.pop_back();
+	}
+	for (int i=0; i<n; ++i) {
+		this_significant._v.erase(this_significant._v.begin());
+		arg_significant._v.erase(arg_significant._v.begin());
+	}
+
+	// Strip trailing 0s
+	this_significant.strip_trailing();
+	this_insig.strip_trailing();
+	arg_significant.strip_trailing();
+	arg_insig.strip_trailing();
+
+	LargeInt p = this_significant*arg_significant;
+	LargeInt q = this_insig*arg_insig;
+	LargeInt r = (this_significant+this_insig)*(arg_significant+arg_insig);
+	return (p.timesten(2*n) + (r-p-q).timesten(n) + q).strip_trailing();
 }
