@@ -1,35 +1,34 @@
-#include <cmath>
 #include <iostream>
 
-double inverse_newton(double n)
-{
-	double x = 2.823529411764706 - 1.8823529411764706 * n;
-	for (int i=0; i<4; ++i)
-		x += x*(1-(n*x));
-	return x;
-}
-
-double divide(double zaehler, double nenner)
-{
-	while (nenner>1) {
-		zaehler/=2;
-		nenner/=2;
-	}
-
-	double inverse = inverse_newton(nenner);
-
-	return zaehler * inverse;
-}
+typedef union {
+	double number;
+	long data;
+} fp_hack;
 
 int main()
 {
-	double zaehler, nenner;
-
+	fp_hack zaehler, nenner;
+	double inverse;
 	std::cout << "Zähler: ";
-	std::cin >> zaehler;
+	std::cin >> zaehler.number;
 	std::cout << "Nenner: ";
-	std::cin >> nenner;
-	printf("\n%g/%g = %.15g\n", zaehler, nenner, divide(zaehler, nenner));
+	std::cin >> nenner.number;
 
-	return 0;
+	if (nenner.number<0) {
+		nenner.number *= -1;
+		zaehler.number *= -1;
+	}
+
+	// Bit magic
+	long diff = (nenner.data - (1022l<<52)) & 0xfff0000000000000;
+	zaehler.data -= diff;
+	nenner.data -= diff;
+
+	// Magic starting values from Wikipedia
+	inverse = 2.823529411764706 - 1.8823529411764706 * nenner.number;
+	// One or two Newton method iterations
+	for (int i=0; i<4; ++i)
+		inverse += inverse*(1-(nenner.number*inverse));
+
+	printf("%.15g\n", zaehler.number*inverse);
 }
