@@ -12,11 +12,6 @@ LargeInt::LargeInt(inputtype i)   // constructor, calls constructor of vector
 	} while (i > 0);
 }
 
-LargeInt::LargeInt(std::vector<short> v)
-{
-	_v = v;
-}
-
 const LargeInt & LargeInt::strip_trailing()
 {
 	while (_v.size() > 1 && _v.back() == 0) {
@@ -120,102 +115,21 @@ const LargeInt & LargeInt::operator-=(const LargeInt & arg) // subtraction
 LargeInt LargeInt::timesten(int n)
 {
 	LargeInt ans(*this);
-	while (n --> 0)
-		ans._v.insert(ans._v.begin(), 0);
+	//while (n --> 0)
+		ans._v.insert(ans._v.begin(), n, 0);
 	return ans;
 }
 
-/*
-LargeInt LargeInt::operator*(const LargeInt& arg) const  // multiplication
-{
-	LargeInt result(*this);
-	result *= arg;
-	return result;
-}
-
-const LargeInt & LargeInt::operator*=(const LargeInt & arg) //multiplication
-{
-	if (arg._v.size()< 2 && _v.size()<2) {					//Termination condition
-		int minimulti;
-
-		minimulti=_v[0]*arg._v[0];
-		_v.clear();
-		_v.push_back(minimulti%10);
-		_v.push_back(minimulti/10);	
-		return *this;
-	}		
-
-	LargeInt x(*this);
-	x._v = _v;
-	LargeInt y(*this);
-	y._v = arg._v;
-
-	if (x._v.size() >= y._v.size()) {
-		if (x._v.size() % 2 != 0) {
-			x._v.insert(x._v.end(), 0);
-		}
-		while (x._v.size() > y._v.size()) {
-			y._v.insert(y._v.end(), 0);
-
-		}
-	}
-	else { 
-		if (y._v.size() % 2 != 0) {
-			y._v.insert(y._v.end(), 0);
-		}
-		while (y._v.size() > x._v.size()) {
-			x._v.insert(x._v.end(), 0);
-		}
-	}
-	
-	LargeInt x1(*this);
-	unsigned i;
-	
-	for(i=0;i<x._v.size()/2;++i){						//gives the parts value of respective parts of the argument
-		x1._v.push_back(x._v[i+(_v.size()/2)]);	
-	}
-	LargeInt y1(*this);
-
-	for(i=0;i<y._v.size()/2;++i){
-		y1._v.push_back(y._v[i+_v.size()/2]);		
-	}
-	
-	LargeInt x2(*this);
-	for(i=0;i<x._v.size()/2;++i){						//gives the parts value of respective parts of the argument
-		x2._v.push_back(x._v[i]);		
-	}
-	LargeInt y2(*this);
-	for(i=0;i<y._v.size()/2;++i){
-		y2._v.push_back(y._v[i]);	
-	}
-	int j;
-	int e10n = x._v.size();
-	int e10n2= (x._v.size()/2)+(x._v.size()%2);
-	LargeInt Multi1=x1*y1;							//should add everything up again  from Karatsuba somehow
-	LargeInt Multi2=x2*y2;
-	LargeInt Multi3=(x1*y2)+(x2*y1)	;
-	for (j=0;j<e10n;++j){
-		Multi1._v.insert(_v.begin(), 0);
-	}
-	for(j=0;j<e10n2;++j){
-		Multi1._v.insert(_v.begin(), 0);
-	}
-
-	*this=Multi1+Multi3+Multi2;
-
-	return *this;
-}
-*/
-
 LargeInt LargeInt::operator*(const LargeInt & arg) const // multiplication
 {
-	if (_v.size() == 1 && arg._v.size() == 1) {
-		if (_v[0] == 0 || arg._v[0] == 0) return LargeInt(0);
-		inputtype value = _v[0]*arg._v[0];
-		return LargeInt(value);
-	}
+	if ((_v.size() == 1 && _v[0]==0) || (arg._v.size() == 1 && arg._v[0]==0))
+		return LargeInt(0);
+	if (_v.size() == 1 && arg._v.size() == 1)
+		return LargeInt(_v[0]*arg._v[0]);
+
 	int l = max(_v.size(), arg._v.size());
 	int n = l/2;
+
 	LargeInt this_significant(*this);
 	LargeInt this_insig(*this);
 	LargeInt arg_significant(arg);

@@ -13,7 +13,6 @@ public:
 	const LargeInt & strip_trailing();
 
 	LargeInt(inputtype);				// constructor
-	LargeInt(std::vector<short>);			// constructor
 	std::string decimal() const;			// decimal representation
 
 	bool operator<(const LargeInt &) const;		// comparison
