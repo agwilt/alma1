@@ -19,8 +19,8 @@ int main()
 		zaehler.number *= -1;
 	}
 
-	// Bit magic
-	long diff = (nenner.data - (1022l<<52)) & 0xfff0000000000000;
+	// Bit magic. 0xc020000000000000 = K_2(1022l<<52)
+	long diff = (nenner.data + 0xc020000000000000) & 0xfff0000000000000;
 	zaehler.data -= diff;
 	nenner.data -= diff;
 
