@@ -4,8 +4,9 @@
 #include <sstream>
 #include <stdexcept>
 #include <limits>
-#include "graph.h"
 #include <stack>
+
+#include "graph.h"
 
 const Graph::NodeId Graph::invalid_node = -1;
 const double Graph::infinite_weight = std::numeric_limits<double>::max();
@@ -91,37 +92,42 @@ void Graph::print() const
 
 Graph::Graph(char const * filename, DirType dtype): dirtype(dtype)
 {
-	std::ifstream file(filename);							 // open file
-	if (not file) {
+	FILE *fp = fopen(filename, "r");
+	Graph::NodeId num;
+	Graph::NodeId head, tail;
+
+	if (fp == NULL) {
 		throw std::runtime_error("Cannot open file.");
 	}
 
-	Graph::NodeId num = 0;
-	std::string line;
-	std::getline(file, line);				// get first line of file
-	std::stringstream ss(line);				// convert line to a stringstream
-	ss >> num;								// for which we can use >>
-	if (not ss) {
+	// Get number of vertices
+	if (!fscanf(fp, "%d\n", &num)) {
+		fclose(fp);
 		throw std::runtime_error("Invalid file format.");
 	}
 	add_nodes(num);
 
-	while (std::getline(file, line)) {
-		std::stringstream ss(line);
-		Graph::NodeId head, tail;
-		ss >> tail >> head;
-		if (not ss) {
-			throw std::runtime_error("Invalid file format.");
-		}
-		double weight = 1.0;
-		ss >> weight;
+	char *line = NULL;
+	char *sp;
+	size_t len = 0;
+
+	// Get edges
+	//while (fscanf(fp, "%d %d", &head, &tail) == 2) {
+	while (getline(&line, &len, fp) != -1) {
+		sp = line;
+		while (*++sp != ' ');
+		*sp = '\0';
+		head = atoi(line);
+		tail = atoi(sp+1);
 		if (tail != head) {
-			add_edge(tail, head, weight);
+			add_edge(tail, head, 1.0);
 		}
 		else {
 			throw std::runtime_error("Invalid file format: loops not allowed.");
 		}
 	}
+	free(line);
+	fclose(fp);
 }
 
 int Graph::zus_komp()
