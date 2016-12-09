@@ -107,18 +107,8 @@ Graph::Graph(char const * filename, DirType dtype): dirtype(dtype)
 	}
 	add_nodes(num);
 
-	char *line = NULL;
-	char *sp;
-	size_t len = 0;
-
 	// Get edges
-	//while (fscanf(fp, "%d %d", &head, &tail) == 2) {
-	while (getline(&line, &len, fp) != -1) {
-		sp = line;
-		while (*++sp != ' ');
-		*sp = '\0';
-		head = atoi(line);
-		tail = atoi(sp+1);
+	while (fscanf(fp, "%d %d", &head, &tail) == 2) {
 		if (tail != head) {
 			add_edge(tail, head, 1.0);
 		}
@@ -126,8 +116,6 @@ Graph::Graph(char const * filename, DirType dtype): dirtype(dtype)
 			throw std::runtime_error("Invalid file format: loops not allowed.");
 		}
 	}
-	free(line);
-	fclose(fp);
 }
 
 int Graph::zus_komp()
