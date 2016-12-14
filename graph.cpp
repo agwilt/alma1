@@ -123,14 +123,10 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 	// Get edges
 	while (getline(&line, &len, fp) != -1) {
 		// line has "%d %d"
-		if (line[0] == '\0') break;
 		p = line;
 
-		head = tail = 0;
-
 		head = fast_atoi(&p);
-		while (*++p == ' ');
-		tail = fast_atoi(&p);
+		tail = fast_atoi(&++p);
 
 		if (tail != head) {
 			add_edge(tail, head, 1.0);
