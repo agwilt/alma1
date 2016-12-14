@@ -6,8 +6,6 @@
 #include <limits>
 #include <stack>
 
-#include <string.h>
-
 #include "graph.h"
 
 const Graph::NodeId Graph::invalid_node = -1;
@@ -92,62 +90,46 @@ void Graph::print() const
 	}
 }
 
-Graph::Graph(char const * filename, DirType dtype): dirtype(dtype)
+Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 {
 	FILE *fp = fopen(filename, "r");
-	Graph::NodeId num;
-	Graph::NodeId head, tail;
 
 	if (fp == NULL) {
 		throw std::runtime_error("Cannot open file.");
 	}
 
-	/*
-	// Get number of vertices
-	if (!fscanf(fp, "%d\n", &num)) {
-		fclose(fp);
+	Graph::NodeId num = 0;
+	Graph::NodeId head, tail;
+
+	char *line;
+	size_t n = 0;
+	if (getline(&line, &n, fp) == -1) {
 		throw std::runtime_error("Invalid file format.");
 	}
-	*/
-	num = 4;
+
+	// Get number of nodes
+	if (sscanf(line, "%d", &num) != 1) {
+		throw std::runtime_error("Invalid file format.");
+	}
+
 	add_nodes(num);
 
-	// Store entire file in text
-	int len = lseek(fp, 0, SEEK_END);
-	char *text = mmap(0, len, PROT_READ, MAP_PRIVATE, fp, 0);
+	n = 0;
 
-	// Get edges
-	/*
-	while (getline(&line, &len, fp) != -1) {
-		sp = line;
-		while (*++sp != ' ');
-		*sp = '\0';
-		head = atoi(line);
-		tail = atoi(sp+1);
+	while (getline(&line, &n, fp) != -1) {
+		char *endptr = 0;
+
+		head = strtoul(line, &endptr, 10);
+		while (*endptr == ' ') ++endptr;
+		tail = strtoul(endptr, &endptr, 10);
+
 		if (tail != head) {
 			add_edge(tail, head, 1.0);
-		}
-		else {
+		} else {
 			throw std::runtime_error("Invalid file format: loops not allowed.");
 		}
 	}
-	*/
-	while (*text != '\0') {
-		std::cout << *text;
-		std::cout << text << std::endl;;
-		head = atoi(strtok(text, " "));
-		text = NULL;
-		tail = atoi(strtok(text, "\n"));
-		if (tail != head) {
-			add_edge(tail, head, 1.0);
-		}
-		else {
-			throw std::runtime_error("Invalid file format: loops not allowed.");
-		}
-		std::cout << *text;
-	}
-
-	free(text);
+	free(line);
 	fclose(fp);
 }
 
