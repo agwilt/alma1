@@ -8,6 +8,15 @@
 
 #include "graph.h"
 
+int fast_atoi( char ** str )
+{
+	int val = 0;
+	while( not (**str == ' ' || **str == '\n' || **str == '\0')) {
+		val = val*10 + (*(*str)++ - '0');
+	}
+	return val;
+}
+
 const Graph::NodeId Graph::invalid_node = -1;
 const double Graph::infinite_weight = std::numeric_limits<double>::max();
 
@@ -93,35 +102,35 @@ void Graph::print() const
 Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 {
 	FILE *fp = fopen(filename, "r");
+	Graph::NodeId num = 0;
+	Graph::NodeId head, tail;
 
 	if (fp == NULL) {
 		throw std::runtime_error("Cannot open file.");
 	}
 
-	Graph::NodeId num = 0;
-	Graph::NodeId head, tail;
-
-	char *line;
-	size_t n = 0;
-	if (getline(&line, &n, fp) == -1) {
-		throw std::runtime_error("Invalid file format.");
-	}
+	char *line = NULL;
+	char *p;
+	size_t len = 0;
 
 	// Get number of nodes
-	if (sscanf(line, "%d", &num) != 1) {
+	if (fscanf(fp, "%d\n", &num) != 1) {
+		fclose(fp);
 		throw std::runtime_error("Invalid file format.");
 	}
-
 	add_nodes(num);
 
-	n = 0;
+	// Get edges
+	while (getline(&line, &len, fp) != -1) {
+		// line has "%d %d"
+		if (line[0] == '\0') break;
+		p = line;
 
-	while (getline(&line, &n, fp) != -1) {
-		char *endptr = 0;
+		head = tail = 0;
 
-		head = strtoul(line, &endptr, 10);
-		while (*endptr == ' ') ++endptr;
-		tail = strtoul(endptr, &endptr, 10);
+		head = fast_atoi(&p);
+		while (*++p == ' ');
+		tail = fast_atoi(&p);
 
 		if (tail != head) {
 			add_edge(tail, head, 1.0);
