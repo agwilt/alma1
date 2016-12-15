@@ -112,6 +112,7 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 	char *line = NULL;
 	char *p;
 	size_t len = 0;
+	double weight;
 
 	// Get number of nodes
 	if (fscanf(fp, "%d\n", &num) != 1) {
@@ -128,8 +129,13 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 		head = fast_atoi(&p);
 		tail = fast_atoi(&++p);
 
+		weight = 1.0;
+		if (*p == ' ') {
+			weight = atof(p+1);
+		}
+
 		if (tail != head) {
-			add_edge(tail, head, 1.0);
+			add_edge(tail, head, weight);
 		} else {
 			throw std::runtime_error("Invalid file format: loops not allowed.");
 		}
