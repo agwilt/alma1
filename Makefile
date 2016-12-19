@@ -5,9 +5,13 @@ GOLDBACH=2016-10-19-goldbach
 SERIES=2016-11-02-series
 DIVISION=2016-11-16-division
 ZUSKOMP=2016-11-30-zuskomp
+MERGESORT=2016-12-14-mergesort
 
 $(ZUSKOMP): $(ZUSKOMP).cpp graph.cpp Makefile
 	$(CPP) $(CPPFLAGS) $(CXXFLAGS) graph.cpp $(ZUSKOMP).cpp -o $(ZUSKOMP)
+
+$(MERGESORT): $(MERGESORT).c linkedlist.c Makefile
+	$(CC) $(CPPFLAGS) linkedlist.c $(MERGESORT).c -o $(MERGESORT)
 
 $(DIVISION): $(DIVISION).cpp Makefile
 	$(CPP) $(CPPFLAGS) $(CXXFLAGS) $(DIVISION).cpp -o $(DIVISION)
