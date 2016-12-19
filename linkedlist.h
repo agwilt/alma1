@@ -13,7 +13,6 @@ typedef struct {
 } List;
 
 List *list_create();
-void free_string(Node *node);
 void list_free(List *list);
 
 void list_print(List *list);
@@ -25,5 +24,6 @@ Node *list_walk(List *list, int n);
 List *list_merge_sort(List *list);
 
 void list_fill_random(List *list, int n);
+int list_fill_file(List *list, const char *filename);
 
 #endif

@@ -22,8 +22,13 @@ void free_string(Node *node)
 
 void list_free(List *list)
 {
-	free_string(list->first);
-	free(list);
+	while (list->num --> 0) {
+		list->last = list->first;
+		list->first = list->first->next;
+		free(list->last);
+	}
+	list->first = list->last = NULL;
+	list->num = 0;
 }
 
 Node *list_append(List *list, int element)
@@ -80,6 +85,21 @@ void list_fill_random(List *list, int n)
 	for (i=0; i<n; ++i) {
 		list_append(list, rand());
 	}
+}
+
+// Returns number of nodes added
+int list_fill_file(List *list, const char *filename)
+{
+	FILE *fp = fopen(filename, "r");
+	int num, element;
+
+	if (fp == NULL) return -1;
+
+	while (fscanf(fp, "%d", &element) == 1) {
+		list_append(list, element);
+		++num;
+	}
+	return num;
 }
 
 void list_det_print(List *list)

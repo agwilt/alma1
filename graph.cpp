@@ -130,7 +130,7 @@ int Graph::zus_komp()
 		++components;
 		// then set up some stuff
 		unexplored.push(r);
-		visited[r] = 1;
+		visited[r] = true;
 		// boldly go forth and explore
 		while (! unexplored.empty()) {
 			next: // continue
