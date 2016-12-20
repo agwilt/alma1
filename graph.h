@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 
+#define MAX_NUM_NODES 10000
+
 class Graph {
 public:
 	using NodeId = int;  // vertices are numbered 0,...,num_nodes()-1
@@ -43,6 +45,8 @@ public:
 	static const double infinite_weight;
 
 	int zus_komp();
+
+	void nuke_nodes();
 
 private:
 	std::vector<Node> _nodes;

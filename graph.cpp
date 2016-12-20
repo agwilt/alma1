@@ -136,13 +136,18 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 	size_t len = 0;			// For getline
 	//double weight;
 
-	if (fp == NULL)
-		throw std::runtime_error("Cannot open file.");
+	if (fp == NULL) {
+		//throw std::runtime_error("Cannot open file.");
+		std::cerr << "Error: Cannot open file: " << filename << "\n";
+		exit(1);
+	}
 
 	// Get number of vertices
 	if (fscanf(fp, "%d\n", &num) != 1) {
 		fclose(fp);
-		throw std::runtime_error("Invalid file format.");
+		//throw std::runtime_error("Invalid file format.");
+		std::cerr << "Error: Invalid file format.\n";
+		exit(1);
 	}
 	add_nodes(num);
 
@@ -164,7 +169,10 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 		if (tail != head) {
 			add_edge(tail, head, 1.0);
 		} else {
-			throw std::runtime_error("Invalid file format: loops not allowed.");
+			fclose(fp);
+			//throw std::runtime_error("Invalid file format: loops not allowed.");
+			std::cerr << "Error: Invalid file format: loops not allowed.";
+			exit(1);
 		}
 	}
 
@@ -179,9 +187,10 @@ int Graph::zus_komp()
 	// Number of Zusammenhangskomponenten
 	int components = 0;
 	// Should be a boolean, but they're horribly slow
-	std::vector<char> visited(num_nodes(), 0);
+	std::vector<bool> visited(num_nodes(), 0);
 	std::stack<int> unexplored;
 
+	// This loops once per Zusammenhangskomponente
 	while (r < num_nodes()) {
 
 		// increment number of components every time the loop loops
@@ -189,6 +198,7 @@ int Graph::zus_komp()
 		// then set up some stuff
 		unexplored.push(r);
 		visited[r] = true;
+		if (num_nodes() < MAX_NUM_NODES) std::cout << r;
 
 		// boldly go forth and explore
 		while (! unexplored.empty()) {
@@ -197,6 +207,9 @@ int Graph::zus_komp()
 			for (auto node : get_node(unexplored.top()).adjacent_nodes()) {
 				// continue if a new node was discovered
 				if (! visited[node.id()]) {
+					// output node
+					if (num_nodes() < MAX_NUM_NODES) std::cout << ", " << node.id();
+					// mark node as visited
 					visited[node.id()] = true;
 					unexplored.push(node.id());
 					goto next; // continue won't work :/
@@ -208,7 +221,14 @@ int Graph::zus_komp()
 
 		// find new r
 		while (r < num_nodes() && visited[r]) ++r;
+
+		if (num_nodes() < MAX_NUM_NODES) std::cout << std::endl;
 	}
 
 	return components;
+}
+
+void Graph::nuke_nodes()
+{
+	_nodes.clear();
 }
