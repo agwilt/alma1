@@ -5,7 +5,9 @@
 
 int main(int argc, char* argv[])
 {
-    if (argc < 2) return 1;
+	if (argc < 2) return 1;
 	Graph g(argv[1], Graph::undirected);
 	std::cout << g.zus_komp() << std::endl;
+	// Can't be bothered to wait for stupid, slow, unnecessary destructors
+	_Exit(0);
 }
