@@ -116,6 +116,7 @@ Graph::Graph(char const * filename, DirType dtype): dirtype(dtype)
 			throw std::runtime_error("Invalid file format: loops not allowed.");
 		}
 	}
+	fclose(fp);
 }
 
 int Graph::zus_komp()
