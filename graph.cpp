@@ -128,7 +128,7 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 	fclose(fp);
 	*/
 	FILE *fp = fopen(filename, "r");
-	Graph::NodeId num = 0;
+	Graph::NodeId num = 0;	// Number of vertices
 	Graph::NodeId head, tail;
 
 	char *line = NULL;		// Line from getline
@@ -139,7 +139,7 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 	if (fp == NULL)
 		throw std::runtime_error("Cannot open file.");
 
-	// Get number of nodes
+	// Get number of vertices
 	if (fscanf(fp, "%d\n", &num) != 1) {
 		fclose(fp);
 		throw std::runtime_error("Invalid file format.");
@@ -151,6 +151,7 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 		// line has "%d %d"
 		p = line;
 
+		// fast_atoi advances p as well as return an int
 		head = fast_atoi(&p);
 		tail = fast_atoi(&++p);
 
@@ -166,23 +167,29 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 			throw std::runtime_error("Invalid file format: loops not allowed.");
 		}
 	}
+
 	free(line);
 	fclose(fp);
 }
 
 int Graph::zus_komp()
 {
+	// Current root to DFS from
 	int r = 0;
+	// Number of Zusammenhangskomponenten
 	int components = 0;
+	// Should be a boolean, but they're horribly slow
 	std::vector<char> visited(num_nodes(), 0);
 	std::stack<int> unexplored;
 
 	while (r < num_nodes()) {
+
 		// increment number of components every time the loop loops
 		++components;
 		// then set up some stuff
 		unexplored.push(r);
 		visited[r] = true;
+
 		// boldly go forth and explore
 		while (! unexplored.empty()) {
 			next: // continue
@@ -198,6 +205,7 @@ int Graph::zus_komp()
 			// if nothing found, pop node
 			unexplored.pop();
 		}
+
 		// find new r
 		while (r < num_nodes() && visited[r]) ++r;
 	}
