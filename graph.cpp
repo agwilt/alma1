@@ -92,6 +92,7 @@ void Graph::print() const
 
 Graph::Graph(char const * filename, DirType dtype): dirtype(dtype)
 {
+	/* Smaller, slower version:
 	FILE *fp = fopen(filename, "r");
 	Graph::NodeId num;
 	Graph::NodeId head, tail;
@@ -117,6 +118,7 @@ Graph::Graph(char const * filename, DirType dtype): dirtype(dtype)
 		}
 	}
 	fclose(fp);
+	*/
 }
 
 int Graph::zus_komp()
