@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 	if (fp == NULL) return 1;
 
 	fprintf(fp, "%d\n", n);
-	for (i=0; i<n; ++i) {
+	for (i=0; i<4*n; ++i) {
 		a = rand()%n;
 		b = rand()%n;
 		if (a!=b)

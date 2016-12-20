@@ -200,23 +200,17 @@ int Graph::zus_komp()
 		visited[r] = true;
 		if (num_nodes() < MAX_NUM_NODES) std::cout << r;
 
-		// boldly go forth and explore
 		while (! unexplored.empty()) {
-			next: // continue
-			// go through neighbourhood
-			for (auto node : get_node(unexplored.top()).adjacent_nodes()) {
-				// continue if a new node was discovered
+			auto cur_node = unexplored.top();
+			unexplored.pop();
+			for (auto node : get_node(cur_node).adjacent_nodes()) {
 				if (! visited[node.id()]) {
-					// output node
-					if (num_nodes() < MAX_NUM_NODES) std::cout << ", " << node.id();
-					// mark node as visited
 					visited[node.id()] = true;
 					unexplored.push(node.id());
-					goto next; // continue won't work :/
+					if (num_nodes() < MAX_NUM_NODES) std::cout << ", " << node.id();
 				}
 			}
 			// if nothing found, pop node
-			unexplored.pop();
 		}
 
 		// find new r

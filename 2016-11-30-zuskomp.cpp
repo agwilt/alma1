@@ -9,5 +9,5 @@ int main(int argc, char* argv[])
 	Graph g(argv[1], Graph::undirected);
 	std::cout << g.zus_komp() << std::endl;
 	// Can't be bothered to wait for stupid, slow, unnecessary destructors
-	_Exit(0);
+	quick_exit(0);
 }
