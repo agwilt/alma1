@@ -8,6 +8,15 @@
 
 #include "graph.h"
 
+int fast_atoi( char ** str )
+{
+	int val = 0;
+	while( not (**str == ' ' || **str == '\n' || **str == '\0')) {
+		val = val*10 + (*(*str)++ - '0');
+	}
+	return val;
+}
+
 const Graph::NodeId Graph::invalid_node = -1;
 const double Graph::infinite_weight = std::numeric_limits<double>::max();
 
@@ -90,35 +99,75 @@ void Graph::print() const
 	}
 }
 
-Graph::Graph(char const * filename, DirType dtype): dirtype(dtype)
+// Warning: this constructor is less careful about checking proper file format
+// and totally ignores weight (to strip weight)
+Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 {
 	/* Smaller, slower version:
 	FILE *fp = fopen(filename, "r");
-	Graph::NodeId num;
+	Graph::NodeId num = 0;
 	Graph::NodeId head, tail;
 
 	if (fp == NULL) {
 		throw std::runtime_error("Cannot open file.");
 	}
 
-	// Get number of vertices
-	if (!fscanf(fp, "%d\n", &num)) {
+	if (fscanf(fp, "%d\n", &num) != 1) {
+		fclose(fp);
+		throw std::runtime_error("Invalid file format.");
+	}
+	add_nodes(num);
+
+	while (fscanf(fp, "%d %d", &head, &tail) == 2) {
+		if (tail != head) {
+			add_edge(tail, head, 1.0);
+		} else {
+			throw std::runtime_error("Invalid file format: loops not allowed.");
+		}
+	}
+	fclose(fp);
+	*/
+	FILE *fp = fopen(filename, "r");
+	Graph::NodeId num = 0;
+	Graph::NodeId head, tail;
+
+	char *line = NULL;		// Line from getline
+	char *p;				// Helps parsing line
+	size_t len = 0;			// For getline
+	//double weight;
+
+	if (fp == NULL)
+		throw std::runtime_error("Cannot open file.");
+
+	// Get number of nodes
+	if (fscanf(fp, "%d\n", &num) != 1) {
 		fclose(fp);
 		throw std::runtime_error("Invalid file format.");
 	}
 	add_nodes(num);
 
 	// Get edges
-	while (fscanf(fp, "%d %d", &head, &tail) == 2) {
+	while (getline(&line, &len, fp) != -1) {
+		// line has "%d %d"
+		p = line;
+
+		head = fast_atoi(&p);
+		tail = fast_atoi(&++p);
+
+		/*
+		weight = 1.0;
+		if (*p == ' ')
+			weight = atof(p+1);
+			*/
+
 		if (tail != head) {
 			add_edge(tail, head, 1.0);
-		}
-		else {
+		} else {
 			throw std::runtime_error("Invalid file format: loops not allowed.");
 		}
 	}
+	free(line);
 	fclose(fp);
-	*/
 }
 
 int Graph::zus_komp()
