@@ -134,7 +134,7 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 	char *line = NULL;		// Line from getline
 	char *p;				// Helps parsing line
 	size_t len = 0;			// For getline
-	//double weight;
+	double weight;
 
 	if (fp == NULL) {
 		//throw std::runtime_error("Cannot open file.");
@@ -160,11 +160,9 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 		head = fast_atoi(&p);
 		tail = fast_atoi(&++p);
 
-		/*
 		weight = 1.0;
 		if (*p == ' ')
 			weight = atof(p+1);
-			*/
 
 		if (tail != head) {
 			add_edge(tail, head, 1.0);
