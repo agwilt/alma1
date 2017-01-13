@@ -7,7 +7,16 @@
 using namespace std;
 
 template <class T>
-vector<T> merge(vector<T> v1,vector<T> v2){
+struct compare_less
+{
+	bool operator()(T const & a, T const & b) const
+	{
+		return a < b;
+	}
+};
+
+template <class T>
+vector<T> merge(vector<T> const & v1, vector<T> const & v2){
 	vector<T> v(v1.size()+v2.size());
 	unsigned int i=0;
 	unsigned int j=0;
@@ -42,8 +51,8 @@ vector<T> merge_sort(const vector<T>& input)
 	}
 	vector<T> output(input.size());
 
-	//Split Vector//
-	int midpoint=0.5*input.size();
+	// Split Vector
+	int midpoint=input.size()/2;
 	vector<T> input_left(input.begin(),input.begin()+midpoint);
 	vector<T> input_right(input.begin()+midpoint,input.end());
 
@@ -55,39 +64,42 @@ vector<T> merge_sort(const vector<T>& input)
 }
 
 int main(){
-	//Create unsorted vector of ints
+	// Create unsorted vector of ints
 	srand(clock());
 	int n=0;
 	cout << "Enter a number: ";
 	cin >> n;
 	vector<int> unsorted(n);
-	vector<int> unsorted_copy(n);
 	for(int i=0; i<n; ++i){
-		unsorted[i]=rand()%1000;
-		unsorted_copy[i]=unsorted[i];
+		unsorted[i]=rand();
 	}
 
-	//Perform merge_sort//
+	// Ouput unsorted vector
+	if (n <= 100) {
+		cout << "Unsorted: " <<  endl;
+		for(auto value:unsorted)  cout << value << " ";
+		cout <<  "\n"<< endl;
+	}
+
+	// Perform merge_sort
 	clock_t	start;
 	start = clock();
 	vector<int> sortedmerge=merge_sort<int>(unsorted);
 	std::cout << "Time: " << (clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << endl;
 
-	//Perform sort//
+	// Perform sort
 	start = clock();
-	sort(unsorted_copy.begin(),unsorted_copy.end());
+	compare_less<int> comp;
+	sort(unsorted.begin(),unsorted.end(), comp);
 	std::cout << "Time: " << (clock() - start) / (double)(CLOCKS_PER_SEC / 1000) << " ms" << endl;
 
-	//Display results//
+	// Display results
 	if (n<=100){
-	cout << "Unsorted: " <<  endl;
-	for(auto value:unsorted)  cout << value << " ";
-	cout <<  "\n"<< endl;
-	cout << "Merge Sorted: " <<  endl;
-	for(auto value:sortedmerge)  cout << value << " ";
-	cout <<  "\n"<<endl;
-	cout << "Sort Sorted: " <<  endl;
-	for(auto value:unsorted_copy)  cout << value << " ";
-	cout <<  "\n"<<endl;
+		cout << "Merge Sorted: " <<  endl;
+		for(auto value:sortedmerge)  cout << value << " ";
+		cout <<  "\n"<<endl;
+		cout << "Sort Sorted: " <<  endl;
+		for(auto value:unsorted)  cout << value << " ";
+		cout <<  "\n"<<endl;
 	}
 }
