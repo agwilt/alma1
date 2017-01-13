@@ -7,6 +7,7 @@
  * 2016-11-16-division: Dividiert zwei Zahlen mit 15 Dezimalstellen Genauigkeit
  * 2016-11-30-zuskomp: Zählt die Anzahl der Zusammenhangskomponenten eines Graphs
  * 2016-12-14-mergesort: Sorts random lists of numbers
+ * Merge.cpp proper mergesort
 
 ## Libraries:
  * complex.h: Complexe Zahlen
