@@ -20,7 +20,6 @@ int fast_atoi( char ** str )
 const Graph::NodeId Graph::invalid_node = -1;
 const double Graph::infinite_weight = std::numeric_limits<double>::max();
 
-
 void Graph::add_nodes(NodeId num_new_nodes)
 {
 	_nodes.resize(num_nodes() + num_new_nodes);
@@ -56,7 +55,7 @@ Graph::NodeId Graph::num_nodes() const
 	return _nodes.size();
 }
 
-const Graph::Node & Graph::get_node(NodeId node) const
+const Graph::Node & Graph::get_node(Graph::NodeId node) const
 {
 	if (node < 0 or node >= static_cast<int>(_nodes.size())) {
 		throw std::runtime_error("Invalid nodeid in Graph::get_node.");
@@ -165,7 +164,7 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 			weight = atof(p+1);
 
 		if (tail != head) {
-			add_edge(tail, head, 1.0);
+			add_edge(tail, head, weight);
 		} else {
 			fclose(fp);
 			//throw std::runtime_error("Invalid file format: loops not allowed.");
