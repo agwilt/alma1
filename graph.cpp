@@ -164,7 +164,7 @@ Graph::Graph(char const *filename, DirType dtype): dirtype(dtype)
 			weight = atof(p+1);
 
 		if (tail != head) {
-			add_edge(tail, head, weight);
+			add_edge(head, tail, weight);
 		} else {
 			fclose(fp);
 			//throw std::runtime_error("Invalid file format: loops not allowed.");

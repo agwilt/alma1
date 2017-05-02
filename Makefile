@@ -7,6 +7,15 @@ DIVISION=2016-11-16-division
 ZUSKOMP=2016-11-30-zuskomp
 MERGESORT=2016-12-14-mergesort
 
+is_circ: is_circ.cpp graph.cpp Makefile
+	$(CPP) $(CPPFLAGS) $(CXXFLAGS) graph.cpp is_circ.cpp -o is_circ
+
+is_arborescence: is_arborescence.cpp graph.cpp Makefile
+	$(CPP) $(CPPFLAGS) $(CXXFLAGS) graph.cpp is_arborescence.cpp -o is_arborescence
+
+bipartition: bipartition.cpp graph.cpp Makefile
+	$(CPP) $(CPPFLAGS) $(CXXFLAGS) graph.cpp bipartition.cpp -o bipartition
+
 $(ZUSKOMP): $(ZUSKOMP).cpp graph.cpp Makefile
 	$(CPP) $(CPPFLAGS) $(CXXFLAGS) graph.cpp $(ZUSKOMP).cpp -o $(ZUSKOMP)
 
