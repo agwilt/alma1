@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
 {
 	if (argc > 1) {
 		Graph g(argv[1], Graph::directed);
+		std::cout << "Done!\n";
 //		g.print();
 		if (digraph_ist_kreis(g)) {
 			std::cout << "Graph is a circle.\n";

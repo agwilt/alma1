@@ -3,20 +3,25 @@
 
 int main(int argc, char *argv[])
 {
-	if (argc<3) return 1;
+	if (argc<4) {
+		printf("Usage: ./makegraph filename n m");
+	}
 
 	int n = atoi(argv[2]);
+	int m = atoi(argv[3]);
 	int i, a, b;
 	char *filename = argv[1];
 	FILE *fp = fopen(filename, "w");
 	if (fp == NULL) return 1;
 
 	fprintf(fp, "%d\n", n);
-	for (i=0; i<4*n; ++i) {
+	for (i=0; i<m; ++i) {
 		a = rand()%n;
 		b = rand()%n;
 		if (a!=b)
 			fprintf(fp, "%d %d\n", a, b);
+		else
+			--i;
 	}
 	fclose(fp);
 
